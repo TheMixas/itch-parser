@@ -3,7 +3,7 @@
 #include <cstring>
 #include <iostream>
 #include <array>
-#include "MappedFIle.h"
+#include "MappedFile.h"
 
 uint16_t read_be16(const uint8_t *p) {
     // combine p[0] and p[1] into a uint16_t, big-endian
@@ -101,7 +101,8 @@ struct MarketParticipantPosition : Header {
 
 static_assert(sizeof(MarketParticipantPosition) == 26);
 
-struct MWCBDeclineLevel : Header {
+struct
+MWCBDeclineLevel : Header {
     uint64_t level1; // offset 11 8 bytes (PRICE8)
     uint64_t level2; // offset 19 8 bytes (PRICE8)
     uint64_t level3; // offset 27 8 bytes (PRICE8)
