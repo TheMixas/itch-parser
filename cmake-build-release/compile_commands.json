@@ -1,8 +1,0 @@
-[
-{
-  "directory": "/home/themi/CLionProjects/itch-parser/cmake-build-release",
-  "command": "/usr/bin/c++   -O3 -DNDEBUG -std=gnu++23 -O3 -march=native -o CMakeFiles/itch_parser.dir/main.cpp.o -c /home/themi/CLionProjects/itch-parser/main.cpp",
-  "file": "/home/themi/CLionProjects/itch-parser/main.cpp",
-  "output": "CMakeFiles/itch_parser.dir/main.cpp.o"
-}
-]
