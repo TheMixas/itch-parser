@@ -1,1 +1,14 @@
-12302019.NASDAQ_ITCH50
+# Build directories
+cmake-build-debug/
+cmake-build-release/
+
+# IDE
+.idea/
+
+# Data files
+*.NASDAQ_ITCH50
+*.gz
+
+# Compiled
+*.o
+*.a
