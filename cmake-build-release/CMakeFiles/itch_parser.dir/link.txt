@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/itch_parser.dir/main.cpp.o -o itch_parser 
