@@ -4,7 +4,7 @@
 #include <iostream>
 #include <array>
 #include "MappedFile.h"
-
+#include "Messages.h"
 uint16_t read_be16(const uint8_t *p) {
     return (p[0] << 8) | p[1];
 }
@@ -35,125 +35,6 @@ size_t message_length(char type) {
         throw std::runtime_error(std::string("Unknown ITCH message type: ") + type);
     return len;
 }
-
-#pragma pack(push, 1)
-
-struct Header {
-    char     msg_type;
-    uint16_t stock_locate;
-    uint16_t tracking_number;
-    uint16_t timestamp_high;
-    uint32_t timestamp_low;
-};
-static_assert(sizeof(Header) == 11);
-
-struct StockTradingAction : Header {
-    char stock[8];
-    char trading_state;
-    char reserved;
-    char reason[4];
-};
-static_assert(sizeof(StockTradingAction) == 25);
-
-struct RegSHORestriction : Header {
-    char stock[8];
-    char reg_sho_action;
-};
-static_assert(sizeof(RegSHORestriction) == 20);
-
-struct MarketParticipantPosition : Header {
-    char mpid[4];
-    char stock[8];
-    char primary_market_maker;
-    char market_maker_mode;
-    char market_participant_state;
-};
-static_assert(sizeof(MarketParticipantPosition) == 26);
-
-struct MWCBDeclineLevel : Header {
-    uint64_t level1;
-    uint64_t level2;
-    uint64_t level3;
-};
-static_assert(sizeof(MWCBDeclineLevel) == 35);
-
-struct MWCBStatus : Header {
-    uint8_t breached_level;
-};
-static_assert(sizeof(MWCBStatus) == 12);
-
-struct QuotingPeriodUpdate : Header {
-    char     stock[8];
-    uint32_t ipq_quotation_release_time;
-    char     ipq_quotation_release_qualifier;
-    uint32_t ipo_price;
-};
-static_assert(sizeof(QuotingPeriodUpdate) == 28);
-
-struct LULDAuctionCollar : Header {
-    char     stock[8];
-    uint32_t auction_collar_reference_price;
-    uint32_t upper_auction_collar_price;
-    uint32_t lower_auction_collar_price;
-    uint32_t auction_collar_extension;
-};
-static_assert(sizeof(LULDAuctionCollar) == 35);
-
-struct OperationalHalt : Header {
-    char stock[8];
-    char market_code;
-    char operation_halt_action;
-};
-static_assert(sizeof(OperationalHalt) == 21);
-
-struct AddOrder : Header {
-    uint64_t order_ref_num;
-    char     side;
-    uint32_t shares;
-    char     stock[8];
-    uint32_t price;
-};
-static_assert(sizeof(AddOrder) == 36);
-
-struct AddOrderMPID : AddOrder {
-    char attribution[4];
-};
-static_assert(sizeof(AddOrderMPID) == 40);
-
-struct OrderExecuted : Header {
-    uint64_t order_ref_num;
-    uint32_t executed_shares;
-    uint64_t match_number;
-};
-static_assert(sizeof(OrderExecuted) == 31);
-
-struct OrderExecutedPrice : OrderExecuted {
-    char     printable;
-    uint32_t execution_price;
-};
-static_assert(sizeof(OrderExecutedPrice) == 36);
-
-struct OrderCancel : Header {
-    uint64_t order_ref_num;
-    uint32_t cancelled_shares;
-};
-static_assert(sizeof(OrderCancel) == 23);
-
-struct OrderDelete : Header {
-    uint64_t order_ref_num;
-};
-static_assert(sizeof(OrderDelete) == 19);
-
-struct OrderReplace : Header {
-    uint64_t order_ref_num;
-    uint64_t new_order_ref_num;
-    uint32_t shares;
-    uint32_t price;
-};
-static_assert(sizeof(OrderReplace) == 35);
-
-#pragma pack(pop)
-
 void parse_itch_file(const MappedFile& f) {
     uint64_t counts[256] = {};
     const uint8_t* ptr = f.data;
